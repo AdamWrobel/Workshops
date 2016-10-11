@@ -17,7 +17,7 @@ map(iris_list, summary)
 # in result we've got a list of three data frame
 cyl <- split(mtcars, mtcars$cyl)
 
-# compute the mean  for each using map function
+# compute the mean mpg for each using map function
 map(cyl, mean, 'mpg')
 
 # construct linear model for each using map function with anonymous function inside

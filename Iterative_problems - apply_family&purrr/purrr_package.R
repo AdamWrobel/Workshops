@@ -2,8 +2,8 @@
 ### purrr package - iterative problems ###
 ##########################################
 
-# install and load package
-install.packages('purrr')
+# load package
+.libPaths('') # add path at which you did unzipped the packages shared via email
 library(purrr)
 
 # map function
@@ -26,31 +26,41 @@ map_dbl(l, mean)
 map_lgl(l, is.numeric)
 map_chr(l, typeof)
 
+# lapply versions
+vapply(l, mean, FUN.VALUE = double(1))
+vapply(l, is.numeric, FUN.VALUE = logical(1))
+vapply(l, typeof, FUN.VALUE = character(1))
+
 # pass additonal arguments
 map(l, quantile)
 map(l, quantile, probs = 0.95)
 map_dbl(l, quantile, probs = 0.95)
 
 ## Exercise #2
-# execute summary function on object a created list using map function
+# execute summary function on object (iris_list) using map function
 # and answer the question:
 # which iris type have on average the longest petals (Petal.Length)
 iris_list <- split(iris,iris$Species)
-map(iris_list, summary)
+
 
 # linear model example
 map(data_list, lm) %>% map(summary)
 models <- map(data_list, lm)
 
+# create a bigger sample
+n_obs <- list(1000,1000,1000)
+data_list2 <- lapply(n_obs,simulation)
+models <- map(data_list2, lm)
+
 # more complex function
-ploting <- function(df){
-  df <- df %>% arrange(x1,y)
-  print(plot(y = df$fitted, x = df$model$x1, type = 'l'))
-  print(lines(y = df$y, x = df$model$x1, col = 'blue'))
+ploting <- function(model_object){
+  plot(y = model_object$fitted, x = model_object$model$y)
 }
 map(models, ploting)
-map(data_list, lm) %>% map(fitted) %>% lines(col = 'blue')
 
+# walk, map and pipes
+walk(models, ploting)
+map(data_list2, lm) %>% walk(ploting) %>% map(summary)
 
 ## shortcuts
 
@@ -70,24 +80,23 @@ map(df, quantile) %>% map('75%')
 # in result we've got a list of three data frame
 cyl <- split(mtcars, mtcars$cyl)
 
-# compute the mean  for each using map function
-map(cyl, 'mpg') %>% map(mean)
+# compute the mean mpg for each using map function
 
-# construct linear model for each using map function with anonymous function inside
-map(cyl, function(df) lm(mpg ~ wt, data = df))
+
+# construct linear model (mpg ~ wt) for each using 
+# map function with anonymous function inside
+
 
 # use shortcut for anonymous functions to get same results
-map(cyl, ~lm(mpg ~ wt, data = .))
+
 
 # save the results in object models
-models <- map(cyl, ~lm(mpg ~ wt, data = .))
+models <- 
 
 # use map and coef to get the coefficients for each model (save as coefs)
-coefs <- map(models, coef)
+coefs <- 
 
 # use string shortcut to extract the wt coefficient
-map(coefs, 'wt')
-map(coefs, 2)
 
 
 ## let's combine what we've learn at workshop#1 and use pipe notation

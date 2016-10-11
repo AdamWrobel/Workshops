@@ -1,6 +1,8 @@
+#####################
+### R Workshop #3 ###
+#####################
 
-library(dplyr)
-
+# simulate some data
 set.seed(1)
 x1 <- rnorm(10, mean = 3, sd = 1)
 x2 <- rpois(10, lambda = 2)
@@ -15,7 +17,7 @@ cor(data)
 
 # use function on one of the dimension of the matrix/data.frame
 
-# apply(data.frame, dimension, function)
+# apply(matrix, dimension, function)
 # apply(X, MARGIN, FUN)
 
 # compute the mean over column dimension
@@ -54,9 +56,9 @@ apply(data, 2, brownian_motion, N = 20)
 arr <- array(data = rnorm(6*4*2), dim = c(6,4,2))
 arr
 
-apply(arr, 1, mean)
-apply(arr, 2, mean)
-apply(arr, 3, mean)
+apply(arr, 1, max) # over rows
+apply(arr, 2, max) # over columns
+apply(arr, 3, max) # over third dimension (category)
 
 # mean per each combination of a row and category
 apply(arr, c(1,3), mean)
@@ -71,18 +73,19 @@ apply(arr, c(1,3), mean)
 x <- rnorm(10)
 
 # square each element of the vector
-lapply(x, function(x, factor) x^2)
+lapply(x, function(x) x^2)
 
 # get results in a form of a vector
-lapply(x, function(x, factor) x^2) %>% unlist
+lapply(x, function(x) x^2) %>% unlist
 
-# simplievied lapply (it tries to guess desiered output format)
-sapply(x, function(x, factor) x^2)
+# simplified lapply (it tries to guess desiered output format)
+sapply(x, function(x) x^2)
 
-vapply(x, function(x, factor) x^2) 
+# sapply with option to specify output format
+vapply(x, function(x) x^2, FUN.VALUE = numeric(1))
 
 
-# lapply on the list
+# lapply on the list - main purpose of lapply function
 
 # define our list (three data.frames)
 data_list <- list()
@@ -111,7 +114,7 @@ lapply(models, summary)
 ## write the data simulation step in form of a function
 simulation <- function(obs){
   x1 <- rnorm(obs, mean = 3, sd = 1)
-  x2 <- rpois(obs, lambda = 2)
+  x2 <- rnorm(obs, mean = 10, sd = 5)
   y <- 2*x1 - x2 + rnorm(obs, mean = 0, sd = 1)
   
   output <- data.frame(y = y, x1 = x1, x2 = x2)
@@ -119,7 +122,7 @@ simulation <- function(obs){
 }
 
 # execute the data simulation step with lapply function
-data_list2 <- list(10,10,10)
-lapply(data_list2,simulation)
+n_obs <- list(10,10,10)
+lapply(n_obs,simulation)
 
 
