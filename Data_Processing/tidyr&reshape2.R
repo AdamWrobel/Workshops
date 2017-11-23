@@ -28,14 +28,6 @@ temp <- PTTZ %>% dcast(year ~  age, value.var = 'ex', fun.aggregate = mean)
 melt(out,id.vars = c('year', 'sex'), variable.name = 'age',value.name = 'ex') %>% head
 
 
-## exercise - EuStockMarkets##
-EuStockMarkets
-
-# using dcast function change it to two column data set with 
-# first column being value of the index and a second one being a name of the index
-
-# using melt function get back to original data set
-
 ###########
 ## tidyr ##
 ###########
